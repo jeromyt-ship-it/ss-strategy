@@ -42,40 +42,48 @@ body {
   min-height: 100vh;
 }
 
-/* HEADER */
+/* HEADER + TABS — single sticky bar */
 header {
   background: var(--surface);
-  border-bottom: 2px solid var(--border);
-  padding: 20px 40px;
-  position: sticky; top: 0; z-index: 100;
-  display: flex; align-items: center; gap: 16px;
-}
-.logo { font-family: 'Lora', serif; font-size: 20px; color: var(--text); font-weight: 600; }
-.logo em { color: var(--accent); font-style: italic; }
-.header-pill {
-  background: var(--accent-lt); color: var(--accent);
-  font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
-  padding: 4px 12px; border-radius: 100px;
-}
-
-/* TABS */
-.tab-bar {
-  background: var(--surface);
   border-bottom: 1px solid var(--border);
-  padding: 0 40px;
-  display: flex;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 12px 32px;
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center;
+}
+.logo {
+  font-family: 'Lora', serif; font-size: 18px; color: var(--text); font-weight: 600;
+  white-space: nowrap; flex-shrink: 0;
+}
+.logo em { color: var(--accent); font-style: italic; }
+
+/* Tab group — centered in the header via margin:auto trick */
+.tab-group {
+  flex: 1;
+  display: flex; justify-content: center;
+}
+.tab-group-inner {
+  display: flex; gap: 6px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border2);
+  border-radius: 12px;
+  padding: 5px;
 }
 .tab-btn {
-  padding: 14px 28px;
-  background: none; border: none;
-  border-bottom: 3px solid transparent;
+  padding: 10px 32px;
+  background: none; border: none; border-radius: 8px;
   color: var(--muted);
-  font-size: 14px; font-weight: 500;
-  cursor: pointer; margin-bottom: -1px;
-  transition: color 0.15s, border-color 0.15s;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; white-space: nowrap;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
 }
-.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
-.tab-btn:hover:not(.active) { color: var(--text2); }
+.tab-btn.active {
+  background: var(--accent); color: #fff;
+  box-shadow: 0 2px 8px rgba(29,111,164,0.28);
+}
+.tab-btn:hover:not(.active) { background: var(--border); color: var(--text2); }
+/* Spacer keeps tabs visually centered despite logo on left */
+.header-spacer { flex-shrink: 0; width: 120px; }
 
 /* PAGE */
 .page { display: none; padding: 40px 40px 80px; max-width: 1100px; margin: 0 auto; }
@@ -274,11 +282,14 @@ tbody tr:hover   { background: var(--surface2); }
 .footer { text-align: center; font-size: 12px; color: var(--muted); padding-top: 24px; }
 
 @media (max-width: 720px) {
-  header { padding: 16px 20px; }
-  .tab-bar { padding: 0 20px; }
+  header { padding: 10px 16px; gap: 8px; }
+  .header-spacer { display: none; }
+  .tab-group { flex: 1; }
+  .tab-btn { padding: 9px 16px; font-size: 13px; }
   .page { padding: 24px 20px 60px; }
   .grid-4, .grid-3 { grid-template-columns: 1fr; }
   .card { padding: 20px; }
+  .logo { font-size: 15px; }
 }
 </style>
 </head>
@@ -286,13 +297,14 @@ tbody tr:hover   { background: var(--surface2); }
 
 <header>
   <div class="logo">SS <em>Strategy</em></div>
-  <div class="header-pill">Claiming Calculator</div>
+  <div class="tab-group">
+    <div class="tab-group-inner">
+      <button class="tab-btn active" onclick="switchTab('profile')">① Life Expectancy</button>
+      <button class="tab-btn" onclick="switchTab('calculator')">② Benefit Strategy</button>
+    </div>
+  </div>
+  <div class="header-spacer"></div>
 </header>
-
-<div class="tab-bar">
-  <button class="tab-btn active" onclick="switchTab('profile')">① Life Expectancy</button>
-  <button class="tab-btn" onclick="switchTab('calculator')">② Benefit Strategy</button>
-</div>
 
 <!-- TAB 1 -->
 <div id="tab-profile" class="page active">
